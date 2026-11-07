@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knee-safe training, week by week</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap">
+<style>
+  :root {
+    --ground: #edf0f1;
+    --ink: #101c26;
+    --ink-2: #4a5762;
+    --rule: #c5cdd2;
+    --done: #1f5bb0;
+    --gap: #e4476c;
+    --hatch: repeating-linear-gradient(135deg, var(--gap) 0 1.6px, transparent 1.6px 6px);
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--ground); }
+  body {
+    margin: 0; color: var(--ink); font: 400 15px/1.5 var(--sans);
+    font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+  }
+  main, .masthead, footer { max-width: 1120px; margin: 0 auto; padding-left: 28px; padding-right: 28px; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* masthead */
+  .masthead { padding-top: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 0; margin: 0; font-size: 13px; color: var(--ink-2); }
+  .meta div { padding: 0 18px; border-left: 1px solid var(--rule); }
+  .meta div:first-child { padding-left: 0; border-left: 0; }
+  .meta dt { display: inline; }
+  .meta dd { display: inline; margin: 0 0 0 6px; color: var(--ink); font-weight: 600; }
+
+  /* hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; padding-top: 44px; padding-bottom: 48px; }
+  h1 {
+    margin: 0 0 18px; font-weight: 850; font-size: clamp(44px, 7vw, 80px); line-height: .94;
+    letter-spacing: -.012em; font-variation-settings: "wdth" 68;
+  }
+  .lead { margin: 0 0 22px; max-width: 36ch; font: 400 23px/1.38 var(--serif); }
+  .ledger { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; gap: 0; margin: 0 0 20px; }
+  .ledger div { padding: 0 22px; border-left: 1px solid var(--rule); }
+  .ledger div:first-child { padding-left: 0; border-left: 0; }
+  .ledger dt { font-size: 13px; color: var(--ink-2); }
+  .ledger dd { margin: 0; font-size: 26px; font-weight: 700; font-variation-settings: "wdth" 85; }
+  .watch { margin: 0; padding: 0; list-style: none; font-size: 14px; }
+  .watch li { padding: 5px 0 5px 16px; position: relative; }
+  .watch li::before { content: ""; position: absolute; left: 0; top: 11px; width: 8px; height: 8px; background: var(--hatch); border: 1px solid var(--gap); }
+  .notice { margin: 0 0 18px; padding: 10px 14px; border-left: 3px solid var(--gap); background: #fff; font-size: 14px; }
+
+  /* tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  caption { text-align: left; font-weight: 700; font-size: 17px; font-variation-settings: "wdth" 90; padding-bottom: 8px; }
+  th, td { text-align: left; padding: 7px 10px 7px 0; border-top: 1px solid var(--rule); vertical-align: top; }
+  th { font-weight: 500; color: var(--ink-2); width: 38%; }
+  td.src { width: 14%; color: var(--ink-2); font-size: 13px; }
+  td ul { margin: 0; padding-left: 16px; }
+  .note { margin: 8px 0 0; font-size: 13px; color: var(--ink-2); }
+
+  /* sections */
+  section.block { padding: 40px 0 44px; border-top: 1px solid var(--rule); }
+  h2 { margin: 0 0 4px; font-size: 28px; font-weight: 800; font-variation-settings: "wdth" 80; letter-spacing: -.005em; }
+  .sub { margin: 0 0 18px; color: var(--ink-2); max-width: 64ch; }
+  .tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 24px; margin-bottom: 14px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--ink-2); }
+  .legend li { display: flex; align-items: center; gap: 7px; }
+  .sw { width: 18px; height: 10px; display: inline-block; }
+  .sw.done { background: var(--done); }
+  .sw.gap { background: var(--hatch); outline: 1px solid var(--gap); outline-offset: -1px; }
+  .sw.target { height: 0; border-top: 2px dashed var(--ink-2); }
+  .link { font: inherit; font-size: 13px; background: none; border: 0; padding: 2px 0; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .scroll { overflow-x: auto; padding-bottom: 6px; }
+
+  /* training matrix */
+  .matrix { display: grid; grid-template-columns: 178px repeat(var(--cols), minmax(58px, 1fr)) 150px; column-gap: 4px; min-width: 860px; align-items: center; }
+  .colhead { font-size: 12px; color: var(--ink-2); padding-bottom: 8px; line-height: 1.25; }
+  .colhead.current { color: var(--ink); font-weight: 600; }
+  .colhead small { display: block; font-weight: 400; color: var(--ink-2); font-size: 11px; }
+  .rowhead { padding: 9px 8px 9px 0; border-top: 1px solid var(--rule); align-self: stretch; }
+  .rowhead b { display: block; font-weight: 650; }
+  .rowhead span { font-size: 12px; color: var(--ink-2); }
+  .cell { border-top: 1px solid var(--rule); align-self: stretch; padding: 9px 0 5px; cursor: default; }
+  .gauge { position: relative; height: 22px; background: var(--hatch); outline: 1px solid var(--gap); outline-offset: -1px; border-radius: 2px; overflow: hidden; }
+  .gauge i { position: absolute; inset: 0 auto 0 0; background: var(--done); width: var(--w); }
+  .gauge.full { background: var(--done); outline-color: var(--done); }
+  .gauge.partial { background: transparent; outline: 1px dashed var(--ink-2); }
+  .gauge.partial i { opacity: .55; }
+  .num { display: block; text-align: center; font-size: 12px; margin-top: 3px; color: var(--ink-2); }
+  .num.zero { color: var(--gap); font-weight: 700; }
+  .summary { padding-left: 14px; border-top: 1px solid var(--rule); align-self: stretch; padding-top: 9px; padding-bottom: 5px; }
+  .summary b { font-size: 20px; font-variation-settings: "wdth" 85; }
+  .summary .status { display: block; font-size: 13px; }
+  .summary .status.gap::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; background: var(--hatch); outline: 1px solid var(--gap); outline-offset: -1px; vertical-align: -1px; }
+  .totalrow { font-size: 12px; color: var(--ink-2); }
+  .totalrow.cell { padding-top: 10px; text-align: center; }
+
+  /* energy */
+  .energy-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .energy-wrap text { font-family: var(--sans); fill: var(--ink-2); font-size: 11px; }
+  .energy-wrap .gaplabel { fill: var(--ink); font-weight: 650; }
+  .energy-wrap .bar:focus-visible { outline: none; }
+  .energy-wrap .bar:focus-visible .hit { stroke: var(--ink); stroke-width: 2; fill: rgba(16, 28, 38, .05); }
+
+  /* advice */
+  .advice-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin-bottom: 8px; }
+  button.primary { font: 600 14px var(--sans); color: #fff; background: var(--ink); border: 0; padding: 10px 18px; border-radius: 2px; cursor: pointer; }
+  button.primary:disabled { opacity: .55; cursor: wait; }
+  .when { font-size: 13px; color: var(--ink-2); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 22px; }
+  .cols h3 { margin: 0 0 6px; font-size: 20px; font-weight: 700; font-variation-settings: "wdth" 88; }
+  .item { padding: 12px 0 14px; border-top: 1px solid var(--rule); font-family: var(--serif); font-size: 17px; line-height: 1.55; }
+  .item h4 { margin: 0 0 2px; font: 700 15px var(--sans); }
+  .item p { margin: 0 0 6px; max-width: 58ch; }
+  .item ul { margin: 0; padding-left: 18px; font-size: 16px; }
+  .empty { font-family: var(--serif); color: var(--ink-2); }
+  .banner { margin: 10px 0 0; padding: 9px 13px; border-left: 3px solid var(--gap); background: #fff; font-size: 14px; }
+
+  footer { padding-top: 36px; padding-bottom: 64px; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 1fr 1fr; gap: 48px; font-size: 14px; color: var(--ink-2); }
+  footer h2 { font-size: 20px; color: var(--ink); }
+  footer ul { margin: 8px 0 0; padding-left: 18px; }
+  footer li { margin-bottom: 6px; max-width: 62ch; }
+
+  #tip { position: absolute; z-index: 10; pointer-events: none; transform: translate(-50%, calc(-100% - 8px)); background: var(--ink); color: #fff; padding: 6px 10px; border-radius: 2px; font-size: 12px; line-height: 1.35; max-width: 260px; }
+
+  @media (max-width: 860px) {
+    .hero, .cols, footer { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    h1 { overflow-wrap: anywhere; }
+    main, .masthead, footer { padding-left: 18px; padding-right: 18px; }
+    .ledger { grid-template-columns: repeat(2, auto); row-gap: 14px; }
+    .ledger div:nth-child(3) { padding-left: 0; border-left: 0; }
+  }
+</style>
+</head>
+<body>
+<header class="masthead">
+  <dl class="meta" id="meta"></dl>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <h1>Knee-safe training, week by week</h1>
+      <p class="lead" id="lead">Reading your Garmin data.</p>
+      <div id="garmin-error" class="notice" role="alert" hidden></div>
+      <dl class="ledger" id="ledger"></dl>
+      <ul class="watch" id="watch"></ul>
+    </div>
+    <div>
+      <table id="profile">
+        <caption>Profile</caption>
+        <tbody></tbody>
+      </table>
+      <p class="note">Fixed profile values, not read from Garmin.</p>
+    </div>
+  </section>
+
+  <section class="block" id="mix">
+    <h2>What the weeks are made of</h2>
+    <p class="sub">Minutes per training type against a weekly target. The hatched part is what is still missing.</p>
+    <div class="tools">
+      <ul class="legend">
+        <li><span class="sw done"></span>Minutes done</li>
+        <li><span class="sw gap"></span>Missing to reach the target</li>
+      </ul>
+      <button class="link" type="button" id="mix-toggle" aria-pressed="false">View as table</button>
+    </div>
+    <div class="scroll" id="mix-chart"></div>
+    <div id="mix-table" hidden></div>
+  </section>
+
+  <section class="block" id="energy">
+    <h2>Active energy, day by day</h2>
+    <p class="sub" id="energy-sub"></p>
+    <div class="tools">
+      <ul class="legend">
+        <li><span class="sw done"></span>Active energy burned</li>
+        <li><span class="sw gap"></span>Short of the daily target</li>
+        <li><span class="sw target"></span>Target</li>
+      </ul>
+      <button class="link" type="button" id="energy-toggle" aria-pressed="false">View as table</button>
+    </div>
+    <div class="energy-wrap" id="energy-chart"></div>
+    <div id="energy-table" hidden></div>
+  </section>
+
+  <section class="block" id="advice">
+    <h2>What to do next</h2>
+    <p class="sub">Suggestions that close the gaps above, generated on demand from the Garmin data and recent bloodwork. Every suggestion is checked against the knee rules in code before it is shown.</p>
+    <div class="advice-head">
+      <button class="primary" type="button" id="advice-btn">Refresh advice</button>
+      <span class="when" id="advice-date">No advice generated yet.</span>
+    </div>
+    <div class="banner" id="advice-error" role="alert" hidden></div>
+    <div class="banner" id="advice-removed" hidden></div>
+    <div class="cols">
+      <div>
+        <h3>Training</h3>
+        <div id="training"></div>
+      </div>
+      <div>
+        <h3>Nutrition</h3>
+        <p class="note">Not based on what you eat: meals are not logged.</p>
+        <div id="nutrition"></div>
+      </div>
+    </div>
+    <p class="note">General guidance only. It does not replace your physio or a doctor.</p>
+  </section>
+</main>
+
+<footer>
+  <div>
+    <h2>How it works</h2>
+    <ul>
+      <li>Garmin data is read directly and read-only, then grouped into minutes per training type, per week.</li>
+      <li>Advice is generated only when you press the button, never when the page opens.</li>
+      <li>Each suggestion is checked against the knee rules in code. Unsafe ones are dropped and counted.</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Targets used</h2>
+    <ul id="targets"></ul>
+  </div>
+</footer>
+
+<div id="tip" role="tooltip" hidden></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+const fmtDay = (iso) => { const [, m, d] = iso.split("-").map(Number); return d + " " + MONTHS[m - 1]; };
+const fmtFull = (iso) => fmtDay(iso) + " " + iso.slice(0, 4);
+const num = (n) => Math.round(n).toLocaleString("en-GB");
+
+function el(tag, attrs, children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs || {})) {
+    if (value === false || value == null) continue;
+    if (key === "text") node.textContent = value; else node.setAttribute(key, value);
+  }
+  for (const child of [].concat(children || [])) {
+    if (child == null) continue;
+    node.append(child);
+  }
+  return node;
+}
+
+function svg(tag, attrs, children) {
+  const node = document.createElementNS(SVG_NS, tag);
+  for (const [key, value] of Object.entries(attrs || {})) {
+    if (value === false || value == null) continue;
+    if (key === "text") node.textContent = value; else node.setAttribute(key, value);
+  }
+  for (const child of [].concat(children || [])) { if (child) node.append(child); }
+  return node;
+}
+
+function makeTable(headers, rows) {
+  return el("table", {}, [
+    el("thead", {}, el("tr", {}, headers.map((h) => el("th", { text: h })))),
+    el("tbody", {}, rows.map((r) => el("tr", {}, r.map((c, i) => (i === 0 ? el("th", { text: c }) : el("td", { text: c })))))),
+  ]);
+}
+
+/* tooltip: one element, driven by data-tip, works for pointer and keyboard */
+const tip = $("tip");
+function showTip(node) {
+  tip.textContent = node.dataset.tip;
+  tip.hidden = false;
+  const r = node.getBoundingClientRect();
+  tip.style.left = window.scrollX + r.left + r.width / 2 + "px";
+  tip.style.top = window.scrollY + r.top + "px";
+}
+function hideTip() { tip.hidden = true; }
+document.addEventListener("pointerover", (e) => { const t = e.target.closest("[data-tip]"); if (t) showTip(t); });
+document.addEventListener("pointerout", (e) => { if (e.target.closest("[data-tip]")) hideTip(); });
+document.addEventListener("focusin", (e) => { const t = e.target.closest("[data-tip]"); if (t) showTip(t); });
+document.addEventListener("focusout", hideTip);
+
+function bindToggle(buttonId, chartId, tableId) {
+  const button = $(buttonId);
+  button.addEventListener("click", () => {
+    const showTable = button.getAttribute("aria-pressed") !== "true";
+    button.setAttribute("aria-pressed", String(showTable));
+    button.textContent = showTable ? "View as chart" : "View as table";
+    $(chartId).hidden = showTable;
+    $(tableId).hidden = !showTable;
+  });
+}
+bindToggle("mix-toggle", "mix-chart", "mix-table");
+bindToggle("energy-toggle", "energy-chart", "energy-table");
+
+/* ---------- masthead, hero, profile ---------- */
+function renderHeader(d) {
+  const meta = $("meta");
+  meta.replaceChildren(
+    el("div", {}, [el("dt", { text: "Garmin data" }), el("dd", { text: fmtFull(d.period.start) + " to " + fmtFull(d.period.end) })]),
+    el("div", {}, [el("dt", { text: "Sessions" }), el("dd", { text: String(d.period.sessions) })]),
+    el("div", {}, [el("dt", { text: "Window" }), el("dd", { text: d.period.days + " days" })]),
+  );
+  $("lead").textContent = d.garmin_error ? "Garmin data is not available right now." : d.headline;
+  const error = $("garmin-error");
+  error.hidden = !d.garmin_error;
+  error.textContent = d.garmin_error || "";
+
+  const s = d.stats;
+  $("ledger").replaceChildren(
+    ...[
+      ["Sessions", String(s.sessions)],
+      ["Hours trained", String(s.hours)],
+      ["Active days", s.active_days + " of " + s.days],
+      ["Daily burn", d.avg_daily_kcal ? num(d.avg_daily_kcal) + " kcal" : "n/a"],
+    ].map(([label, value]) => el("div", {}, [el("dt", { text: label }), el("dd", { text: value })])),
+  );
+  $("watch").replaceChildren(...d.alerts.map((a) => el("li", { text: a })));
+}
+
+function renderProfile(d) {
+  const p = d.profile;
+  const rows = [
+    ["Age", p.age + " years", "Fixed"],
+    ["Height", p.height_cm + " cm", "Fixed"],
+    ["Weight", p.weight_kg + " kg", "Fixed"],
+    ["Body mass index", p.bmi.toFixed(1), "Derived"],
+    ["Basal metabolism", num(p.bmr) + " kcal/day", "Derived"],
+    ["Average daily burn", d.avg_daily_kcal ? num(d.avg_daily_kcal) + " kcal" : "n/a", "Garmin"],
+    ["Goal", p.goal, "Fixed"],
+  ];
+  const body = $("profile").querySelector("tbody");
+  body.replaceChildren(
+    ...rows.map(([k, v, src]) => el("tr", {}, [el("th", { text: k }), el("td", { text: v }), el("td", { class: "src", text: src })])),
+    el("tr", {}, [
+      el("th", { text: "Knee rules" }),
+      el("td", { colspan: "2" }, el("ul", {}, p.restrictions.map((r) => el("li", { text: r })))),
+    ]),
+  );
+}
+
+/* ---------- training matrix ---------- */
+function statusText(g) {
+  if (g.status === "on_target") return "On target";
+  if (g.status === "missing") return "Not started";
+  return num(g.gap_minutes) + " min short";
+}
+
+function renderMatrix(d) {
+  const weeks = d.weeks;
+  const last = weeks.length - 1;
+  const grid = el("div", { class: "matrix", style: "--cols:" + weeks.length });
+
+  grid.append(el("div", { class: "colhead", text: "Training type" }));
+  weeks.forEach((w, i) => {
+    grid.append(el("div", { class: "colhead" + (i === last ? " current" : "") }, [
+      fmtDay(w.week_start), i === last ? el("small", { text: "so far" }) : null,
+    ]));
+  });
+  grid.append(el("div", { class: "colhead", style: "padding-left:14px", text: "Average per week" }));
+
+  d.gaps.forEach((g) => {
+    grid.append(el("div", { class: "rowhead" }, [el("b", { text: g.label }), el("span", { text: "target " + g.target_minutes + " min a week" })]));
+    weeks.forEach((w, i) => {
+      const minutes = w.minutes[g.category] || 0;
+      const sessions = w.sessions[g.category] || 0;
+      const ratio = Math.min(minutes / g.target_minutes, 1);
+      const partial = i === last;
+      const reached = minutes >= g.target_minutes;
+      const tipText = g.label + ", week of " + fmtDay(w.week_start) + ": " + num(minutes) + " min in " + sessions +
+        (sessions === 1 ? " session" : " sessions") + (partial ? " so far" : "") + ". Target " + g.target_minutes + " min.";
+      grid.append(el("div", { class: "cell", tabindex: "0", "data-tip": tipText, "aria-label": tipText }, [
+        el("div", { class: "gauge" + (reached && !partial ? " full" : "") + (partial ? " partial" : "") },
+          el("i", { style: "--w:" + (ratio * 100).toFixed(1) + "%" })),
+        el("span", { class: "num" + (minutes === 0 && !partial ? " zero" : ""), text: num(minutes) }),
+      ]));
+    });
+    grid.append(el("div", { class: "summary" }, [
+      el("b", { text: num(g.avg_minutes) }), " min",
+      el("span", { class: "status" + (g.status === "on_target" ? "" : " gap"), text: statusText(g) }),
+    ]));
+  });
+
+  grid.append(el("div", { class: "rowhead totalrow", style: "border-top:1px solid var(--rule)", text: "All activity (min)" }));
+  weeks.forEach((w) => grid.append(el("div", { class: "cell totalrow", text: num(w.total_minutes) })));
+  grid.append(el("div", { class: "summary" }));
+
+  $("mix-chart").replaceChildren(grid);
+  $("mix-table").replaceChildren(makeTable(
+    ["Training type", ...weeks.map((w) => fmtDay(w.week_start)), "Weekly target"],
+    d.gaps.map((g) => [g.label, ...weeks.map((w) => num(w.minutes[g.category] || 0)), String(g.target_minutes)]),
+  ));
+}
+
+/* ---------- energy chart ---------- */
+function renderEnergy(d) {
+  const days = d.daily;
+  const chart = $("energy-chart");
+  const sub = $("energy-sub");
+  if (!days.length) {
+    sub.textContent = "No daily energy data yet.";
+    chart.replaceChildren();
+    $("energy-table").replaceChildren();
+    return;
+  }
+  const target = d.targets.active_kcal;
+  const complete = days.filter((x) => !x.partial);
+  const met = complete.filter((x) => x.active_kcal >= target).length;
+  sub.textContent = met + " of " + complete.length + " complete days reached the " + num(target) +
+    " kcal active-energy target. Today is shown in progress, so it is not counted as a shortfall.";
+
+  const W = 980, H = 330, m = { l: 52, r: 96, t: 22, b: 54 };
+  const plotW = W - m.l - m.r, plotH = H - m.t - m.b;
+  const top = Math.ceil(Math.max(target * 1.5, ...days.map((x) => x.active_kcal)) / 250) * 250;
+  const y = (v) => m.t + plotH * (1 - v / top);
+  const slot = plotW / days.length, bw = slot * 0.62;
+
+  const root = svg("svg", { viewBox: "0 0 " + W + " " + H, role: "img",
+    "aria-label": "Daily active energy against a target of " + target + " kilocalories. " + met + " of " + complete.length + " complete days reached it." });
+  root.append(svg("defs", {}, svg("pattern", { id: "hatch", width: "6", height: "6", patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" },
+    svg("line", { x1: "0", y1: "0", x2: "0", y2: "6", stroke: "#e4476c", "stroke-width": "1.8" }))));
+
+  for (let v = 0; v <= top; v += 250) {
+    root.append(svg("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), stroke: "#c5cdd2", "stroke-width": v === 0 ? 1.4 : 0.8 }));
+    root.append(svg("text", { x: m.l - 8, y: y(v) + 4, "text-anchor": "end", text: num(v) }));
+  }
+
+  days.forEach((day, i) => {
+    const x = m.l + i * slot + (slot - bw) / 2;
+    const base = y(0);
+    const hasGap = day.gap_kcal > 0 && !day.partial;
+    const tipText = fmtDay(day.date) + ": " + num(day.active_kcal) + " kcal active energy" +
+      (day.partial ? " so far today." : hasGap ? ", " + num(day.gap_kcal) + " short of the " + num(target) + " target." : ", target reached.") +
+      " " + num(day.steps) + " steps.";
+    const group = svg("g", { class: "bar", tabindex: "0", "data-tip": tipText, "aria-label": tipText });
+    group.append(svg("rect", { class: "hit", x: m.l + i * slot, y: m.t, width: slot, height: plotH, fill: "transparent" }));
+    if (hasGap) {
+      group.append(svg("rect", { x, y: y(target), width: bw, height: y(day.active_kcal) - y(target), fill: "url(#hatch)", stroke: "#e4476c", "stroke-width": 1.2, rx: 2 }));
+      group.append(svg("text", { class: "gaplabel", x: x + bw / 2, y: y(target) - 6, "text-anchor": "middle", text: "-" + num(day.gap_kcal) }));
+    }
+    group.append(svg("rect", {
+      x, y: y(day.active_kcal), width: bw, height: Math.max(base - y(day.active_kcal), 1), rx: 2, fill: "#1f5bb0",
+      opacity: day.partial ? 0.5 : 1, stroke: day.partial ? "#4a5762" : null, "stroke-dasharray": day.partial ? "3 3" : null,
+    }));
+    root.append(group);
+
+    const cx = x + bw / 2;
+    const dow = new Date(day.date + "T00:00:00").getDay();
+    root.append(svg("text", { x: cx, y: base + 17, "text-anchor": "middle", text: String(Number(day.date.slice(8))) }));
+    root.append(svg("text", { x: cx, y: base + 31, "text-anchor": "middle", text: day.partial ? "today" : WEEKDAYS[dow] }));
+  });
+
+  root.append(svg("line", { x1: m.l, x2: W - m.r + 8, y1: y(target), y2: y(target), stroke: "#4a5762", "stroke-width": 1.4, "stroke-dasharray": "5 4" }));
+  root.append(svg("text", { x: W - m.r + 14, y: y(target) - 3, text: "Target" }));
+  root.append(svg("text", { x: W - m.r + 14, y: y(target) + 11, text: num(target) + " kcal" }));
+  chart.replaceChildren(root);
+
+  $("energy-table").replaceChildren(makeTable(
+    ["Day", "Active kcal", "Target", "Short by", "Steps"],
+    days.map((x) => [fmtDay(x.date) + (x.partial ? " (today, in progress)" : ""), num(x.active_kcal), num(x.target_kcal), x.partial ? "n/a" : num(x.gap_kcal), num(x.steps)]),
+  ));
+}
+
+/* ---------- advice and footer ---------- */
+function adviceItem(title, detail, extras) {
+  const children = [el("h4", { text: title })];
+  if (detail) children.push(el("p", { text: detail }));
+  if (extras && extras.length) children.push(el("ul", {}, extras.map((e) => el("li", { text: e }))));
+  return el("div", { class: "item" }, children);
+}
+
+function renderAdvice(cache) {
+  const removed = $("advice-removed");
+  if (!cache) {
+    $("advice-date").textContent = "No advice generated yet.";
+    $("training").replaceChildren(el("p", { class: "empty", text: "Press Refresh advice to generate suggestions." }));
+    $("nutrition").replaceChildren();
+    removed.hidden = true;
+    return;
+  }
+  const when = new Date(cache.generated_at);
+  $("advice-date").textContent = "Generated " + (isNaN(when) ? cache.generated_at : when.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })) + ".";
+  $("training").replaceChildren(...cache.advice.training.map((t) => adviceItem(t.title, t.detail, t.exercises)));
+  $("nutrition").replaceChildren(...cache.advice.nutrition.map((n) => adviceItem(n.title, n.detail)));
+  removed.hidden = !(cache.removed > 0);
+  removed.textContent = cache.removed > 0
+    ? cache.removed + (cache.removed === 1 ? " suggestion was" : " suggestions were") + " dropped because they did not respect the knee rules."
+    : "";
+}
+
+function renderTargets(d) {
+  const t = d.targets;
+  const rows = Object.entries(t.weekly).map(([cat, min]) => d.labels[cat] + ": " + min + " minutes a week");
+  rows.push("Active energy: " + num(t.active_kcal) + " kcal a day");
+  rows.push("These are editable assumptions, not medical prescriptions.");
+  $("targets").replaceChildren(...rows.map((r) => el("li", { text: r })));
+}
+
+function render(d) {
+  renderHeader(d);
+  renderProfile(d);
+  renderMatrix(d);
+  renderEnergy(d);
+  renderAdvice(d.advice);
+  renderTargets(d);
+}
+
+async function load() {
+  try {
+    const response = await fetch("/api/dashboard");
+    render(await response.json());
+  } catch (e) {
+    $("lead").textContent = "The dashboard could not be loaded.";
+  }
+}
+
+$("advice-btn").addEventListener("click", async () => {
+  const button = $("advice-btn");
+  const error = $("advice-error");
+  button.disabled = true;
+  button.textContent = "Generating";
+  error.hidden = true;
+  try {
+    const response = await fetch("/api/advice/refresh", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
+    const result = await response.json();
+    if (response.ok) renderAdvice(result); else { error.textContent = result.error; error.hidden = false; }
+  } catch (e) {
+    error.textContent = "Could not reach the server.";
+    error.hidden = false;
+  } finally {
+    button.disabled = false;
+    button.textContent = "Refresh advice";
+  }
+});
+
+load();
+</script>
+</body>
+</html>

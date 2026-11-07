@@ -1,0 +1,24 @@
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.garminconnect/
+garmin_tokens*
+oauth*_token*.json
+
+# Personal data (blood tests, cached LLM advice, anything health-related)
+data/
+*.csv
+analitica*
+advice.json
+
+# Python / tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+dist/
+build/
