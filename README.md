@@ -1,4 +1,4 @@
-# Knee-safe training dashboard
+# Hyper-personalized training dashboard
 
 A small local dashboard that reads my Garmin data, shows what my training weeks are really made of, and, only when I press a button, asks an LLM for training and nutrition advice. Every suggestion is checked by plain code against my knee-injury rules before I see it.
 
